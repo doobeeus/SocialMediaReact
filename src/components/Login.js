@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
 
 function Login(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [auth, setAuth] = useState('');
+    const navigate = useNavigate();
     async function handleLogin() {
         
         const url = 'http://localhost:5089/api/Registration/Login'
@@ -26,6 +26,12 @@ function Login(){
         });
         const response = await res.json();
         console.log(response);
+        if (response.statusCode == 200) {
+            localStorage.setItem("ID", response.registration.id);
+            localStorage.setItem("email", email);
+            localStorage.setItem("name", response.registration.name);
+            navigate("/userDashboard");
+        }
     } catch (e) {
         console.log(e);
     }

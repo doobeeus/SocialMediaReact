@@ -11,12 +11,12 @@ function Registration(){
     async function handleRegistration() {
         
         const url = 'http://localhost:5089/api/Registration/Registration'
-        const data = {
+        const jsondata = {
             "name": name,
             "email": email,
             "password": password
         }
-        console.log(JSON.stringify(data))
+        console.log(JSON.stringify(jsondata))
         try {
         const res = await fetch(url, {
             method: 'post',
@@ -26,7 +26,15 @@ function Registration(){
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': '*',
             'Access-Control-Allow-Headers': 'Content-Type, Authorization'},
-            body: JSON.stringify(data)
+            body: JSON.stringify(jsondata)
+        })
+        .then((result) => {
+            const dt = result.data;
+            if(dt.statusCode === 200) {
+                localStorage.setItem("email", email);
+                localStorage.setItem("username", dt.Registration.name);
+                //history.push("/userdashboard");
+            }
         });
         const response = await res.json();
         console.log(response);
